@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hub-app-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hub-app
+  template:
+    metadata:
+      labels:
+        app: hub-app
+    spec:
+      containers:
+        - name: app
+          image: fahimsami/hub-app
+          ports:
+            - containerPort: 3000
+      imagePullSecrets:
+        - name: registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hub-app-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: hub-app
+  ports:
+    - name: hub-app
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

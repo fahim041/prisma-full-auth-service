@@ -6,7 +6,7 @@ import { excludeFields } from '../services/exclude-fields';
 const router = express.Router();
 const prisma = new PrismaClient();
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/api/users/register', async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
   const hashedPassword = await Password.toHash(password);
 
