@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { CustomError } from '../errors/custom-error';
 
 export const errorHandler = async (
   err: Error,
@@ -6,6 +7,11 @@ export const errorHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('erorr', err);
-  res.status(400).send({ message: err.message });
+  console.log('Error handler middleware -->', err);
+
+  if (err instanceof CustomError) {
+    return res.status(err.statusCode).send({ errors: err.serializeErrors() });
+  }
+
+  res.status(400).send({ errors: [{ message: 'Unknown error' }] });
 };

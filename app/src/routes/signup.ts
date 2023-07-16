@@ -3,6 +3,8 @@ import { body, validationResult } from 'express-validator';
 import prismaClient from '../../prisma/db';
 import { Password } from '../services/password';
 import { excludeFields } from '../services/exclude-fields';
+import { RequestValidationError } from '../errors/request-validation-error';
+import { DatabaseConnectionError } from '../errors/database-connection-error';
 
 const router = express.Router();
 const prisma = prismaClient;
@@ -20,7 +22,7 @@ router.post(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      throw new Error('Invalid email or password!');
+      throw new RequestValidationError(errors.array());
     }
 
     // const { username, email, password } = req.body;
@@ -33,7 +35,7 @@ router.post(
     // res.json({
     //   data: excludeFields({ fields: ['password', 'updatedAt'] }, user),
     // });
-
+    throw new DatabaseConnectionError();
     res.send({});
   }
 );
