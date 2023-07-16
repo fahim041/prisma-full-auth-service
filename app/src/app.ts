@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
+require('./utils/async-error');
 import { signupRouter } from './routes/signup';
 import { errorHandler } from './middlewares/error-handler';
 import { NotFoundError } from './errors/not-found-error';
