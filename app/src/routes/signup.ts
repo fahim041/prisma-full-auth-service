@@ -4,7 +4,7 @@ import prismaClient from '../../prisma/db';
 import { Password } from '../services/password';
 import { excludeFields } from '../utils/exclude-fields';
 import { RequestValidationError } from '../errors/request-validation-error';
-import { DatabaseConnectionError } from '../errors/database-connection-error';
+import { BadRequestError } from '../errors/bad-request-error';
 
 const router = express.Router();
 const prisma = prismaClient;
@@ -25,18 +25,25 @@ router.post(
       throw new RequestValidationError(errors.array());
     }
 
-    // const { username, email, password } = req.body;
-    // const hashedPassword = await Password.toHash(password);
+    const { username, email, password } = req.body;
 
-    // const user = await prisma.user.create({
-    //   data: { email, username, password: hashedPassword },
-    // });
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
 
-    // res.json({
-    //   data: excludeFields({ fields: ['password', 'updatedAt'] }, user),
-    // });
-    throw new DatabaseConnectionError();
-    res.send({});
+    if (existingUser) {
+      throw new BadRequestError('Email in use');
+    }
+
+    const hashedPassword = await Password.toHash(password);
+
+    const user = await prisma.user.create({
+      data: { email, username, password: hashedPassword },
+    });
+
+    res.json({
+      data: excludeFields({ fields: ['password', 'updatedAt'] }, user),
+    });
   }
 );
 
