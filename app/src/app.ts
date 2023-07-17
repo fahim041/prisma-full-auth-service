@@ -6,6 +6,7 @@ import { errorHandler } from './middlewares/error-handler';
 import { NotFoundError } from './errors/not-found-error';
 import { signinRouter } from './routes/signin';
 import { currentUserRouter } from './routes/current-user';
+import { signoutRouter } from './routes/signout';
 
 const app = express();
 app.set('trust proxy', true);
@@ -20,9 +21,11 @@ app.use(
   })
 );
 
+//app routes
 app.use(signupRouter);
 app.use(signinRouter);
 app.use(currentUserRouter);
+app.use(signoutRouter);
 
 //ping the server for status
 app.get('/api/ping', (req: Request, res: Response) => {
