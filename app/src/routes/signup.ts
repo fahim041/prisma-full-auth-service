@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
 import prismaClient from '../../prisma/db';
 import { Password } from '../services/password';
 import { excludeFields } from '../utils/exclude-fields';
@@ -40,6 +41,20 @@ router.post(
     const user = await prisma.user.create({
       data: { email, username, password: hashedPassword },
     });
+
+    //generate jwt
+    const userJwt = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_KEY!
+    );
+
+    // store it in session
+    req.session = {
+      jwt: userJwt,
+    };
 
     res.json({
       data: excludeFields({ fields: ['password', 'updatedAt'] }, user),

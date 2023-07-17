@@ -1,17 +1,31 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 require('./utils/async-error');
+import cookieSession from 'cookie-session';
 import { signupRouter } from './routes/signup';
 import { errorHandler } from './middlewares/error-handler';
 import { NotFoundError } from './errors/not-found-error';
 
 const app = express();
-
+app.set('trust proxy', true);
 app.use(express.json());
+
+//cookie session middleware
+app.use(
+  cookieSession({
+    signed: false,
+    secure: false,
+    maxAge: 1 * 60 * 1000, // 1 minute
+  })
+);
 
 app.use(signupRouter);
 
 //ping the server for status
 app.get('/api/ping', (req: Request, res: Response) => {
+  res.send('server is up and running!');
+});
+
+app.post('/api/ping', (req: Request, res: Response) => {
   res.send('server is up and running!');
 });
 
