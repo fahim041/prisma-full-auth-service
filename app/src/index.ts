@@ -1,5 +1,5 @@
 import { app } from './app';
-import prismaClient from '../prisma/db';
+import prisma from '../prisma/db';
 import { DatabaseConnectionError } from './errors/database-connection-error';
 
 const PORT = 3000 || process.env.PORT;
@@ -11,7 +11,6 @@ const start = async () => {
   }
 
   //checking database connection before app is starting
-  const prisma = prismaClient;
   try {
     await prisma.$connect();
   } catch (error) {

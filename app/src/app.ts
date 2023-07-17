@@ -4,6 +4,7 @@ import cookieSession from 'cookie-session';
 import { signupRouter } from './routes/signup';
 import { errorHandler } from './middlewares/error-handler';
 import { NotFoundError } from './errors/not-found-error';
+import { signinRouter } from './routes/signin';
 
 const app = express();
 app.set('trust proxy', true);
@@ -14,11 +15,12 @@ app.use(
   cookieSession({
     signed: false,
     secure: false,
-    maxAge: 1 * 60 * 1000, // 1 minute
+    maxAge: 5 * 60 * 1000, // 1 minute
   })
 );
 
 app.use(signupRouter);
+app.use(signinRouter);
 
 //ping the server for status
 app.get('/api/ping', (req: Request, res: Response) => {

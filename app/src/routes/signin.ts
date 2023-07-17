@@ -1,47 +1,49 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
+import { validateRequest } from '../middlewares/validate-request';
 import prisma from '../../prisma/db';
+import { BadRequestError } from '../errors/bad-request-error';
 import { Password } from '../services/password';
 import { excludeFields } from '../utils/exclude-fields';
-import { RequestValidationError } from '../errors/request-validation-error';
-import { BadRequestError } from '../errors/bad-request-error';
-import { validateRequest } from '../middlewares/validate-request';
 
 const router = express.Router();
 
 router.post(
-  '/api/users/register',
+  '/api/users/signin',
   [
     body('email').isEmail().withMessage('Email must be valid'),
     body('password')
       .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage('Password must be between 4 and 20 characters'),
+      .notEmpty()
+      .withMessage('You must supply a password'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
-    if (existingUser) {
-      throw new BadRequestError('Email in use');
+    if (!existingUser) {
+      throw new BadRequestError('Invalid Credentials');
     }
 
-    const hashedPassword = await Password.toHash(password);
+    const passwordMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
 
-    const user = await prisma.user.create({
-      data: { email, username, password: hashedPassword },
-    });
+    if (!passwordMatch) {
+      throw new BadRequestError('Invalid Credentials');
+    }
 
     //generate jwt
     const userJwt = jwt.sign(
       {
-        id: user.id,
-        email: user.email,
+        id: existingUser.id,
+        email: existingUser.email,
       },
       process.env.JWT_KEY!
     );
@@ -52,9 +54,12 @@ router.post(
     };
 
     res.json({
-      data: excludeFields({ fields: ['password', 'updatedAt'] }, user),
+      data: excludeFields(
+        { fields: ['password', 'updatedAt', 'createdAt'] },
+        existingUser
+      ),
     });
   }
 );
 
-export { router as signupRouter };
+export { router as signinRouter };
