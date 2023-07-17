@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
-require('./utils/async-error');
+import 'express-async-errors';
 import cookieSession from 'cookie-session';
-import { signupRouter } from './routes/signup';
-import { errorHandler } from './middlewares/error-handler';
-import { NotFoundError } from './errors/not-found-error';
-import { signinRouter } from './routes/signin';
-import { currentUserRouter } from './routes/current-user';
-import { signoutRouter } from './routes/signout';
+import { signupRouter } from '@routes/signup';
+import { errorHandler } from '@middlewares/error-handler';
+import { NotFoundError } from '@errors/not-found-error';
+import { signinRouter } from '@routes/signin';
+import { currentUserRouter } from '@routes/current-user';
+import { signoutRouter } from '@routes/signout';
 
 const app = express();
 app.set('trust proxy', true);
@@ -29,10 +29,6 @@ app.use(signoutRouter);
 
 //ping the server for status
 app.get('/api/ping', (req: Request, res: Response) => {
-  res.send('server is up and running!');
-});
-
-app.post('/api/ping', (req: Request, res: Response) => {
   res.send('server is up and running!');
 });
 

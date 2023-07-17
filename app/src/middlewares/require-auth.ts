@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { NotAuthorizedError } from '../errors/not-authorized-error';
 import { currentUser } from './current-user';
-import { Session } from '../services/session';
+import { Session } from '@services/session';
 
 export const requireAuth = (
   req: Request,

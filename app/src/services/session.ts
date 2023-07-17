@@ -1,4 +1,4 @@
-import prisma from '../../prisma/db';
+import prisma from '@prisma/db';
 
 export class Session {
   static async init(token: string, user: string) {

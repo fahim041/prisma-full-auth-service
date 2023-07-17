@@ -1,6 +1,6 @@
 import { app } from './app';
-import prisma from '../prisma/db';
-import { DatabaseConnectionError } from './errors/database-connection-error';
+import prisma from '@prisma/db';
+import { DatabaseConnectionError } from '@errors/database-connection-error';
 
 const PORT = 3000 || process.env.PORT;
 

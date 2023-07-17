@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { authorized } from '../middlewares/require-auth';
+import { authorized } from '@middlewares/require-auth';
 
 const router = express.Router();
 

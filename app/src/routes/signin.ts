@@ -1,11 +1,11 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
-import { validateRequest } from '../middlewares/validate-request';
-import prisma from '../../prisma/db';
-import { BadRequestError } from '../errors/bad-request-error';
-import { Password } from '../services/password';
-import { excludeFields } from '../utils/exclude-fields';
+import { validateRequest } from '@middlewares/validate-request';
+import prisma from '@prisma/db';
+import { BadRequestError } from '@errors/bad-request-error';
+import { Password } from '@services/password';
+import { excludeFields } from '@utils/exclude-fields';
 
 const router = express.Router();
 

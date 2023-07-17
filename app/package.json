@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev src/index.ts"
+    "build": "tsc && tsc-alias",
+    "start": "node ./dist/src/index.js",
+    "dev": "ts-node-dev -r tsconfig-paths/register ./src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +23,8 @@
     "jsonwebtoken": "^9.0.1",
     "prisma": "^5.0.0",
     "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.7",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.6"
   }
 }
