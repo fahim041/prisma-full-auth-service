@@ -4,7 +4,7 @@ export class BadRequestError extends CustomError {
   statusCode = 400;
 
   constructor(public message: string) {
-    super('Bad request error');
+    super(message);
   }
 
   serializeErrors(): { message: string; field?: string | undefined }[] {
