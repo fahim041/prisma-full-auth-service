@@ -14,7 +14,7 @@ export const requireAuth = (
 
   req.session = req.session || {};
 
-  Session.init(req.session?.jwt, req.currentUser!.id);
+  Session.init(req.session?.jwt, req.currentUser.id);
 
   next();
 };

@@ -7,12 +7,16 @@ export class Session {
     });
 
     if (!existingSession) {
-      const newSession = await prisma.session.create({
-        data: {
-          token,
-          user: { connect: { id: Number(user) } },
-        },
+      const currentUser = await prisma.user.findUnique({
+        where: { id: Number(user) },
       });
+      currentUser &&
+        (await prisma.session.create({
+          data: {
+            token,
+            userId: currentUser.id,
+          },
+        }));
     } else {
       //increment view count
       await prisma.session.update({
