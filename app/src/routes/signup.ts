@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
-import prisma from '@prisma/db';
+import prisma from '@dbclient/db';
 import { Password } from '@services/password';
 import { excludeFields } from '@utils/exclude-fields';
 import { BadRequestError } from '@errors/bad-request-error';
@@ -50,7 +50,7 @@ router.post(
       jwt: userJwt,
     };
 
-    res.json({
+    res.status(201).json({
       data: excludeFields({ fields: ['password', 'updatedAt'] }, user),
     });
   }

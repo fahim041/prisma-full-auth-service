@@ -7,8 +7,6 @@ export const errorHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Error handler middleware -->', err);
-
   if (err instanceof CustomError) {
     return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
