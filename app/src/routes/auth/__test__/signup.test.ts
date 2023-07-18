@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../../app';
+import { app } from '@/app';
 import prisma from '@dbclient/db';
 
 it('returns a 201 on successful signup', async () => {

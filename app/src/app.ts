@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
 import 'express-async-errors';
 import cookieSession from 'cookie-session';
-import { signupRouter } from '@routes/signup';
+import { signupRouter } from '@routes/auth/signup';
 import { errorHandler } from '@middlewares/error-handler';
 import { NotFoundError } from '@errors/not-found-error';
-import { signinRouter } from '@routes/signin';
+import { signinRouter } from '@routes/auth/signin';
 import { currentUserRouter } from '@routes/current-user';
-import { signoutRouter } from '@routes/signout';
+import { signoutRouter } from '@routes/auth/signout';
 
 const app = express();
 app.set('trust proxy', true);
