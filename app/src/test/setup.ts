@@ -1,8 +1,6 @@
 import prisma from '@dbclient/db';
 
-beforeAll(async () => {
-  console.log('****** Starting ******');
-});
+beforeAll(async () => {});
 
 beforeEach(async () => {
   const userDelete = prisma.user.deleteMany();
